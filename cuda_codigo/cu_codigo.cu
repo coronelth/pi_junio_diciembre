@@ -7,13 +7,13 @@
 
 //-------------Funcion llenar la "velocidad"
 
-void llenarVelocidad(int ** pmat, int row, int colum){
+void llenarVelocidad(double ** pmat, int row, int colum){
 	FILE *fichero;
 	int node=row*colum;
 	int i,j;
 	int nvel=9;
-		
-
+	int height, width;
+	float leer;
 	
  	fichero = fopen("matriz_con_func_dist.txt","r");
 	
@@ -28,13 +28,15 @@ void llenarVelocidad(int ** pmat, int row, int colum){
 
 		for(j=0;j<nvel;j++){
 
-			fscanf(fichero,"%i",&pmat[i][j]);	
+			fscanf(fichero,"%f",&leer);	
+			pmat[i][j]=leer;
+			//printf("%f",leer);
 		}
 	fscanf(fichero, "\n"); 
 	}
-
-       
-   fclose(fichero);
+	
+	fclose(fichero);
+}
 
 
 //-------------Funcion llenar los vecinos
@@ -82,21 +84,15 @@ int offset = x + y * blockDim.x * gridDim.x;
 
 int j;
 
-if (x<node){
-	if (y<nvec){
-		j=y;//para que una parte haga los vecinos y la otra parte calcule la suma de los 
-		psum[x][k]+=pdist[pvec[x][j]][k];
-		if ((y > nvec)&&(y < nvec+ndist )){
-			psum[x][k]+=pdist[pvec[x][j]][k];			
-			}
+if (x<node){ //para que se paralelice en cada nodo
+	if (y<nvec){	//para que se paralelice en cada vecino
+		for(k=0;k<nvel;k++){	//para cada velocidad realizo la suma al no saber como paralelizar esta parte
+			psum[i][k]+=pdist[pvec[i][j]][k];				
 		}
 }
 
+
 }
-
-
-
-
 
 
 
@@ -124,6 +120,8 @@ cudaMalloc( (void**)&dev_vecinos, node*nvec*sizeof(int) );
 
 // inicializacion de datos
 
+llenarVecinos(int ** dev_vecinos, int row, int colum);
+llenarVelocidad(double ** dev_matriz, int row, int colum);
 
 /*
 // copia de datos

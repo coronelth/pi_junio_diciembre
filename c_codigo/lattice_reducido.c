@@ -157,13 +157,13 @@ void llenarVelocidad(double ** pmat, int row, int colum){
     
 
 //---------------------------------------------------- COMPROBACION DE QUE ESTA LEYENDO CORRECTAMENTE-----------------------------------
-   printf( "Contenido del fichero:\n" );
+   /* printf( "Contenido del fichero:\n" );
    for (i = 0; i < node; i++) {
       for (j = 0; j < nvel; j++)
 	 printf ("%f ", pmat[i][j]);
       printf ("\n");
    }
-
+*/
        
    
 }
@@ -172,10 +172,12 @@ void llenarVelocidad(double ** pmat, int row, int colum){
 
 void sumarVelocidad(double ** pdist,int ** pvec,double ** psum, int node){
 	int i,j,k;	
-	
+	int nvec=9;
+	int nvel=9;
+
 	for(i=0;i<node;i++)	//para cada nodo
-		for(j=0;j<9;j++)	//para cada vecino (son 9)
-			for(k=0;k<9;k++){	//para cada velocidad
+		for(j=0;j<nvec;j++)	//para cada vecino (son 9)
+			for(k=0;k<nvel;k++){	//para cada velocidad
 			
 			psum[i][k]+=pdist[pvec[i][j]][k];			
 	}	
