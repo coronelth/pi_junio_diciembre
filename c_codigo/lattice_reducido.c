@@ -107,12 +107,12 @@ void llenarVecinos(int ** pmat, int row, int colum){
    fclose(fichero);
 
 //---------------------------------------------------- COMPROBACION DE QUE ESTA LEYENDO CORRECTAMENTE-----------------------------------
-   printf( "Contenido del fichero:\n" );
+  /* printf( "Contenido del fichero:\n" );
    for (i = 0; i < node; i++) {
       for (j = 0; j < nvec; j++)
 	 printf ("%d ", pmat[i][j]);
       printf ("\n");
-   }
+   }*/
 
    return ;
 }
@@ -127,7 +127,7 @@ void llenarVelocidad(double ** pmat, int row, int colum){
 	int i,j;
 	int nvel=9;
 	int height, width;
-
+	float leer;
 	
  	fichero = fopen("matriz_con_func_dist.txt","r");
 	
@@ -142,7 +142,9 @@ void llenarVelocidad(double ** pmat, int row, int colum){
 
 		for(j=0;j<nvel;j++){
 
-			fscanf(fichero,"%f",&pmat[i][j]);	
+			fscanf(fichero,"%f",&leer);	
+			pmat[i][j]=leer;
+			//printf("%f",leer);
 		}
 	fscanf(fichero, "\n"); 
 	}
@@ -152,19 +154,16 @@ void llenarVelocidad(double ** pmat, int row, int colum){
 //--------------------------------------------------------------------------------------------------------------------------------------
 
 
-   
     
 
-    
-/*
 //---------------------------------------------------- COMPROBACION DE QUE ESTA LEYENDO CORRECTAMENTE-----------------------------------
    printf( "Contenido del fichero:\n" );
    for (i = 0; i < node; i++) {
       for (j = 0; j < nvel; j++)
-	 printf ("%1.0f ", pmat[i][j]);
+	 printf ("%f ", pmat[i][j]);
       printf ("\n");
    }
-*/
+
        
    
 }
