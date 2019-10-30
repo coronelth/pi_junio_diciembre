@@ -42,6 +42,9 @@ cudaMalloc( (void**)&dev_vecinos, node*nvec*sizeof(int) );
 // inicializacion de datos
 
 llenarVecinos(&dev_vecinos, row, colum);
+printf("\n\nvoy bien\n\n");
+/*
+
 llenarVelocidad(&dev_velocidad, row, colum);
 
 
@@ -93,8 +96,16 @@ cudaMemcpy(hst_velocidad, dev_velocidad, node*nvel*sizeof(float), cudaMemcpyDevi
 
 cudaFree( dev_vecinos );
 cudaFree( dev_velocidad );
-cudaFree( hst_velocidad );
+cudaFree( hst_velocidad );*/
 
 
 return 0;
 }
+
+
+
+
+
+
+
+
