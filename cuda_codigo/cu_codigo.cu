@@ -6,92 +6,13 @@
 #include <cuda_runtime.h>
 
 //-------------Funcion llenar "velocidad"
-
-void llenarVelocidad(double ** pmat, int row, int colum){
-	FILE *fichero;
-	int node=row*colum;
-	int i,j;
-	int nvel=9;
-	float leer;
-	
- 	fichero = fopen("matriz_con_func_dist.txt","r");
-	
-	   if (fichero==NULL)
-   	{
-  	    printf( "No se puede abrir el fichero.\n" );
-	      system("pause");
-	      exit (EXIT_FAILURE);
-	   }
-	
-	for(i=0;i<node;i++){
-
-		for(j=0;j<nvel;j++){
-
-			fscanf(fichero,"%f",&leer);	
-			pmat[i][j]=leer;
-			printf("%f",leer);
-		}
-	fscanf(fichero, "\n"); 
-	}
-
-	fclose(fichero);
-}
-
-
+void llenarVelocidad(double ** pmat, int row, int colum);
 //-------------Funcion llenar los vecinos
-
-void llenarVecinos(int ** pmat, int row, int colum){
-	FILE *fichero;
-	int node=row*colum;
-	int i,j;
-	int nvec=9;
-		
-
-	
- 	fichero = fopen("matriz_con_vecinos.txt","r");
-	
-	   if (fichero==NULL)
-   	{
-  	    printf( "No se puede abrir el fichero.\n" );
-	      system("pause");
-	      exit (EXIT_FAILURE);
-	   }
-	
-	for(i=0;i<node;i++){
-
-		for(j=0;j<nvec;j++){
-
-			fscanf(fichero,"%i",&pmat[i][j]);	
-		}
-	fscanf(fichero, "\n"); 
-	}
-
-
-       
-   fclose(fichero);
-}
-
+void llenarVecinos(int ** pmat, int row, int colum);
 //-------------Funcion sumar velocidad
-
-__global__ void sumarvelocidad(double ** pdist,int ** pvec,double ** psum, int node) {
-int nvec=9;	//numero de vecinos
-int ndist=9;	//numero de funcion de distribucion
-int k;
-int x = threadIdx.x + blockIdx.x * blockDim.x;
-int y = threadIdx.y + blockIdx.y * blockDim.y;
-// int offset = x + y * blockDim.x * gridDim.x;
-
-if (x<node){ //para que se paralelice en cada nodo
-	if (y<nvec){	//para que se paralelice en cada vecino
-		for(k=0;k<ndist;k++){	//para cada velocidad realizo la suma al no saber como paralelizar esta parte
-			psum[x][k]+=pdist[pvec[x][y]][k];				
-						}
-		}
+__global__ void sumarvelocidad(double ** pdist,int ** pvec,double ** psum, int node); 
 
 
-		}
-
-}
 
 // MAIN: rutina principal ejecutada en el host
 int main(int argc, char** argv)
@@ -136,6 +57,9 @@ cudaEventRecord(start,0);
 
 // -----------------------------------------------
 	sumarvelocidad<<<16,256>>>(&dev_velocidad, &dev_vecinos, &dev_suma, node);
+
+
+
    if (cudaDeviceSynchronize() != cudaSuccess) {
        fprintf (stderr, "Cuda call failed\n");
    }
