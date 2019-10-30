@@ -38,11 +38,11 @@ hst_velocidad = (double*)malloc( node*nvel*sizeof(double) );
 cudaMalloc( (void**)&dev_velocidad, node*nvel*sizeof(double) );
 cudaMalloc( (void**)&dev_suma, node*nvel*sizeof(double) );
 cudaMalloc( (void**)&dev_vecinos, node*nvec*sizeof(int) );
+printf("\n\nvoy bien\n\n");
 
 // inicializacion de datos
-
+printf("ccccc");
 llenarVecinos(&dev_vecinos, row, colum);
-printf("\n\nvoy bien\n\n");
 /*
 
 llenarVelocidad(&dev_velocidad, row, colum);
