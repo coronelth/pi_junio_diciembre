@@ -25,7 +25,7 @@ void llenarVecinos(int ** pmat, int row, int colum){
 
 		for(j=0;j<nvec;j++){
 
-			fscanf(fichero,"%i",&((pmat[i])[j]));	
+			fscanf(fichero,"%d",&((pmat[i])[j]));	
 		}
 	fscanf(fichero, "\n"); 
 	}

@@ -26,6 +26,7 @@ int nvec=9;
 int nvel=9;
 
 int *dev_vecinos;
+int *hst_vec;
 double *dev_velocidad;
 double *dev_suma;
 double *hst_velocidad;
@@ -34,15 +35,30 @@ double *hst_velocidad;
 // reserva en el host
 hst_velocidad = (double*)malloc( node*nvel*sizeof(double) );
 
+// esto se implemento ---> hst_vec
+hst_vec = (int*)malloc( node*nvel*sizeof(int) );
+
+
 // reserva en el device
 cudaMalloc( (void**)&dev_velocidad, node*nvel*sizeof(double) );
 cudaMalloc( (void**)&dev_suma, node*nvel*sizeof(double) );
 cudaMalloc( (void**)&dev_vecinos, node*nvec*sizeof(int) );
 printf("\n\nvoy bien\n\n");
 
+
+
+
 // inicializacion de datos
 printf("ccccc");
-llenarVecinos(&dev_vecinos, row, colum);
+
+llenarVecinos(&hst_vec, row, colum);
+//llenarVecinos(&dev_vecinos, row, colum);
+
+cudaMemcpy(dev_velocidad, hst_vec , node*nvec*sizeof(int), cudaMemcpyHostToDevice);
+
+printf("ccccc");
+
+
 /*
 
 llenarVelocidad(&dev_velocidad, row, colum);
