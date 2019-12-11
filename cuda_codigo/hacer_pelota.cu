@@ -96,33 +96,6 @@ void llenarVecinos(int ** pmat, int row, int colum){
    return ;
 }
 
-//-------------Funcion sumar velocidad
-
-__global__ void sumarvelocidad(float ** pdist,int ** pvec,float ** psum, int node) {
-int nvec=9;	//numero de vecinos
-int ndist=9;	//numero de funcion de distribucion
-int k;
-int x = threadIdx.x + blockIdx.x * blockDim.x;
-int y = threadIdx.y + blockIdx.y * blockDim.y;
-// int offset = x + y * blockDim.x * gridDim.x;
-
-if (x<node){ //para que se paralelice en cada nodo
-	if (y<nvec){	//para que se paralelice en cada vecino
-		for(k=0;k<ndist;k++){	//para cada velocidad realizo la suma al no saber como paralelizar esta parte
-			psum[x][k]+=pdist[pvec[x][y]][k];				
-						}
-		}
-
-
-		}
-
-}
-
-
-
-
-
-
 
 //matriz de vecinos
 void liberaVecinos(int ** pmat, int node) {
@@ -175,6 +148,36 @@ float ** allocaMatriz(int node, int nveloc) {
 	}
 	return pmat;
 }
+
+
+
+//-------------Funcion sumar velocidad
+
+__global__ void sumarvelocidad(float ** pdist,int ** pvec,float ** psum, int node) {
+int nvec=9;	//numero de vecinos
+int ndist=9;	//numero de funcion de distribucion
+int k=0;
+int x = threadIdx.x + blockIdx.x * blockDim.x;
+int y = threadIdx.y + blockIdx.y * blockDim.y;
+printf("Estoy en el kernel \n\n\n\n");
+if (x<node){ //para que se paralelice en cada nodo
+	if (y<nvec){	//para que se paralelice en cada vecino
+		for(k=0;k<ndist;k++){	//para cada velocidad realizo la suma al no saber como paralelizar esta parte
+			psum[x][k]+=pdist[pvec[x][y]][k];				
+						}
+		}
+
+
+		}
+printf("Termine el kernel \n\n\n\n");
+}
+
+
+
+
+
+
+
 
 
 
@@ -258,6 +261,7 @@ cudaEventRecord(start,0);
 
 	printf("Llamo al Kernel \n");
 
+//	sumarvelocidad<<<16,256>>>(&dev_velocidad, &dev_vecinos, &dev_suma, node);
 	sumarvelocidad<<<16,256>>>(&dev_velocidad, &dev_vecinos, &dev_suma, node);
    if (cudaDeviceSynchronize() != cudaSuccess) {
        fprintf (stderr, "Cuda call failed\n");
@@ -265,6 +269,26 @@ cudaEventRecord(start,0);
 
 // aqui va el kernel que realiza la suma que es lo que se quiere medir
 // -----------------------------------------------
+
+
+// ver si esta sumando bien
+/*   printf( "Contenido de SUMA :\n" );
+
+int i=0;
+int j=0;
+
+   for (i = 0; i < node; i++) {
+      for (j = 0; j < nvec; j++)
+	 printf ("%d ", hst_suma[i][j]);
+      printf ("\n");
+   }*/
+
+
+
+
+
+
+
 
 
 // marca de final
