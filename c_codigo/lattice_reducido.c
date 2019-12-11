@@ -150,7 +150,7 @@ void llenarVelocidad(double ** pmat, int row, int colum){
 	}
 	
 	fclose(fichero);
-}
+
 //--------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -164,8 +164,8 @@ void llenarVelocidad(double ** pmat, int row, int colum){
       printf ("\n");
    }
 */
-       
-///--------------- ver que se incluya en el }   
+}      
+
 
 	
 // Sumar velocidades

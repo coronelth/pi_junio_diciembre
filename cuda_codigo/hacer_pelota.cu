@@ -13,9 +13,7 @@ void llenarVelocidad(float ** pmat, int row, int colum){
 	int i,j;
 	int nvel=9;
 	float leer;
-
-	//float **pmat = NULL;	
-
+	
  	fichero = fopen("matriz_con_func_dist.txt","r");
 	
 	   if (fichero==NULL)
@@ -24,32 +22,34 @@ void llenarVelocidad(float ** pmat, int row, int colum){
 	      system("pause");
 	      exit (EXIT_FAILURE);
 	   }
-
-
-	printf("\n\nEstoy por leer del archivo matriz_con_func_dist.txt \n\n");		
 	
 	for(i=0;i<node;i++){
-		
-		printf("Estoy por entrar al for con i...");
 
 		for(j=0;j<nvel;j++){
 
-			fscanf(fichero,"%f",&leer);
-			printf("Imprimo leer= %f  y cargo pmat[i][j]");	
+			fscanf(fichero,"%f",&leer);	
 			pmat[i][j]=leer;
-			printf("%f",leer);
+			//printf("%f",leer);
 		}
 	fscanf(fichero, "\n"); 
 	}
-
+	
 	fclose(fichero);
 
-	for(i=0;i<node;i++){
-		for(j=0;j<nvel;j++){
-			printf("%f\t",pmat[i][j]);
-		}
-	}
-}
+//--------------------------------------------------------------------------------------------------------------------------------------
+
+
+    
+
+//---------------------------------------------------- COMPROBACION DE QUE ESTA LEYENDO CORRECTAMENTE-----------------------------------
+  /*  printf( "Contenido del fichero:\n" );
+   for (i = 0; i < node; i++) {
+      for (j = 0; j < nvel; j++)
+	 printf ("%f ", pmat[i][j]);
+      printf ("\n");
+   }*/
+
+}      
 
 
 //-------------Funcion llenar los vecinos
@@ -59,11 +59,9 @@ void llenarVecinos(int ** pmat, int row, int colum){
 	int node=row*colum;
 	int i,j;
 	int nvec=9;
-	int aux=0;
+		
 
 	
-	/*pmat[k]=0;*/
-
  	fichero = fopen("matriz_con_vecinos.txt","r");
 	
 	   if (fichero==NULL)
@@ -77,23 +75,25 @@ void llenarVecinos(int ** pmat, int row, int colum){
 
 		for(j=0;j<nvec;j++){
 
-			fscanf(fichero,"%d", &aux);  
-			/*fscanf(fichero,"%d", &pmat[k]);*/
-			/* printf("%d\t",pmat[k]); */
-			//printf("%d\t",aux); 
-			pmat[i][j]=aux;
-
-			
-
+			fscanf(fichero,"%i",&pmat[i][j]);	
 		}
-	printf("\n");
 	fscanf(fichero, "\n"); 
-	
 	}
-	
+
 
        
    fclose(fichero);
+
+//---------------------------------------------------- COMPROBACION DE QUE ESTA LEYENDO CORRECTAMENTE-----------------------------------
+
+/*   printf( "Contenido del fichero:\n" );
+   for (i = 0; i < node; i++) {
+      for (j = 0; j < nvec; j++)
+	 printf ("%d ", pmat[i][j]);
+      printf ("\n");
+   }*/
+
+   return ;
 }
 
 //-------------Funcion sumar velocidad
@@ -210,13 +210,19 @@ cudaMalloc( (void**)&dev_suma, node*nvel*sizeof(float));
 
 
 // inicializacion de datos
-printf("Llamo a llenarVecinos \n");
-
 llenarVecinos(hst_vecinos, row, colum);
 llenarVelocidad(hst_velocidad, row, colum);
 
+// pasaje de los datos del hst al dev 
+
+cudaMemcpy(dev_vecinos,hst_vecinos,node*nvel*sizeof(int),cudaMemcpyHostToDevice);
+cudaMemcpy(dev_velocidad,hst_velocidad,node*nvel*sizeof(float),cudaMemcpyHostToDevice);
 
 
+printf("Termine de pasar los datos al dev \n\n\n\n");
+
+
+/*
 // ver que es lo que tienen las matrices que se acaban de llenar en la alocacion
 int i=0;
 int j=0;
@@ -228,9 +234,9 @@ for(i=0;i<node;i++){
 }
 
 
+printf("Que hay en el dev \n\n\n\n");
 
-
-
+*/
 
 
 
