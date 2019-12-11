@@ -124,6 +124,22 @@ int ** allocaVecinos(int node, int nvecinos) {
 }
 
 
+// Funciones de alocacion y liberacion de memoria para el vector que representa la Matriz
+
+float *allocaVector(int node, int n) {
+	float *v = (float *) malloc(node * n * sizeof(float));
+	assert(v != NULL);
+	return v;
+}
+
+void liberaVector(float *vec) {
+free(vec);
+return;
+}
+
+
+
+
 //matriz distribicion y matriz de suma
 void liberaMatriz(float** pmat, int node) {
 	int i;
@@ -132,6 +148,7 @@ void liberaMatriz(float** pmat, int node) {
 		free(pmat);
 	return;
 	}
+
 float ** allocaMatriz(int node, int nveloc) {	
 	int i;
 	float **pmat;
@@ -198,12 +215,23 @@ float *dev_velocidad;
 float *dev_suma;
 
 
-
+/*
 // reserva en el host
 
 int** hst_vecinos   = allocaVecinos(node,nvec);
 float** hst_velocidad = allocaMatriz(node,nvel);
 float** hst_suma      = allocaMatriz(node,nvel);
+*/
+
+
+
+
+// reserva en el host
+
+int*   hst_vecinos   = allocaVecinos(node,nvec);
+float* hst_velocidad = allocaVector(node,nvel);
+float* hst_suma      = allocaVector(node,nvel);
+
 
 
 // reserva en el device
@@ -318,9 +346,30 @@ cudaFree( dev_vecinos );
 cudaFree( dev_velocidad );
 cudaFree( hst_velocidad );
 
+/*
 liberaMatriz(hst_suma,node);
 liberaMatriz(hst_velocidad,node);
 liberaVecinos(hst_vecinos,node);
+*/
+
+
+
+liberaVector(hst_suma);
+liberaVector(hst_velocidad);
+liberaVecinos(hst_vecinos,node);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 return 0;
 }
