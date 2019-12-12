@@ -13,68 +13,56 @@
 #include "llenar_velocidad.h"
 #include "sumar_velocidad.h"
 #include "guardar_suma.h"
+#include "densidad_suma_doble_if.h"
 
 // MAIN: rutina principal ejecutada en el host
 int main(int argc, char** argv)
 {
 
 // declaracion
-int row=6;
-int colum=6;
-int node=row*colum;
-int nvec=9;
-int nvel=9;
+int row   = 6;
+int colum = 6;
+int node  = row*colum;
+int nvec  = 9;
+int nvel  = 9;
+int one   = 1;
+int i;
 
 int *dev_vecinos;
 float *dev_velocidad;
 float *dev_suma;
 
-
-/*
 // reserva en el host
 
-int** hst_vecinos   = allocaVecinos(node,nvec);
-float** hst_velocidad = allocaMatriz(node,nvel);
-float** hst_suma      = allocaMatriz(node,nvel);
-*/
-
-
-
-
-// reserva en el host
-
-int*   hst_vecinos   = allocaVecinos(node,nvec);
+int* hst_vecinos   = allocaVecinos(node,nvec);
 float* hst_velocidad = allocaVector(node,nvel);
-float* hst_suma      = allocaVector(node,nvel);
-
-// inicializar en cero el valor de la hst_suma
-int i;
-for(i=0;i<node;i++)
-	hst_suma[i*nvel+nvel] = 0;
-
+float* hst_suma      = allocaVector(node,one);
 
 // reserva en el device
 cudaMalloc( (void**)&dev_vecinos, node*nvec*sizeof(int));
 cudaMalloc( (void**)&dev_velocidad, node*nvel*sizeof(float));
-cudaMalloc( (void**)&dev_suma, node*nvel*sizeof(float));
+cudaMalloc( (void**)&dev_suma, node*sizeof(float));
 
 
 // inicializacion de datos
 llenarVecinos(hst_vecinos, row, colum);
 llenarVelocidad(hst_velocidad, row, colum);
 
+for(i=0;i<node;i++){ // inicializar en cero el valor de la hst_suma
+	hst_suma[i] = 0;
+}
 
 
 // pasaje de los datos del hst al dev 
 
 cudaMemcpy(dev_vecinos,hst_vecinos,node*nvel*sizeof(int),cudaMemcpyHostToDevice);
 cudaMemcpy(dev_velocidad,hst_velocidad,node*nvel*sizeof(float),cudaMemcpyHostToDevice);
-cudaMemcpy(dev_suma,hst_suma,node*nvel*sizeof(float),cudaMemcpyHostToDevice);
+cudaMemcpy(dev_suma,hst_suma,node*one*sizeof(float),cudaMemcpyHostToDevice);
 
 printf("Termine de pasar los datos al dev \n\n\n\n");
 
 
-
+/*
 // ------------------- ver que se este realizando bien el pasaje de los datos
 
 liberaVecinos(hst_vecinos);
@@ -116,7 +104,7 @@ for(i=0;i<node;i++){
 		printf("\n");
 }
 printf("\n\n");
-
+*/
 
 
 printf("Que hay en el dev \n\n\n\n");
@@ -138,26 +126,14 @@ cudaEventRecord(start,0);
 	printf("Llamo al Kernel \n");
 
 //	sumarvelocidad<<<16,256>>>(&dev_velocidad, &dev_vecinos, &dev_suma, node);
-	sumarvelocidad<<<16,256>>>(dev_velocidad, dev_vecinos, dev_suma, node);
+//	sumarvelocidad<<<64,256>>>(dev_velocidad, dev_vecinos, dev_suma, node);
+	densidad_suma_doble_if<<<64,256>>>(dev_velocidad,dev_suma,node); 
    if (cudaDeviceSynchronize() != cudaSuccess) {
        fprintf (stderr, "Cuda call failed\n");
    }
 
 // aqui va el kernel que realiza la suma que es lo que se quiere medir
 // -----------------------------------------------
-
-
-// ver si esta sumando bien
-/*   printf( "Contenido de SUMA :\n" );
-
-int i=0;
-int j=0;
-
-   for (i = 0; i < node; i++) {
-      for (j = 0; j < nvec; j++)
-	 printf ("%d ", hst_suma[i][j]);
-      printf ("\n");
-   }*/
 
 // marca de final
 cudaEventRecord(stop,0);
@@ -173,36 +149,32 @@ cudaEventDestroy(start);
 cudaEventDestroy(stop);
 
 // copia de datos
-cudaMemcpy(hst_velocidad, dev_velocidad, node*nvel*sizeof(float), cudaMemcpyDeviceToHost);
+cudaMemcpy(hst_suma, dev_suma, node*one*sizeof(float), cudaMemcpyDeviceToHost);
 // salida
 
-guardar_suma(hst_velocidad,node,nvel);
+// ver si esta sumando bien
+   printf( "Contenido de SUMA :\n" );
+
+
+for(i=0;i<node;i++){
+		printf("%f\t",hst_suma[i]); 
+		printf("\n");		
+		
+}
+printf("\n\n");
+
+
+guardar_suma(hst_suma,node,one);
 
 
 cudaFree( dev_vecinos );
 cudaFree( dev_velocidad );
 cudaFree( hst_velocidad );
 
-/*
-liberaMatriz(hst_suma,node);
-liberaMatriz(hst_velocidad,node);
-liberaVecinos(hst_vecinos,node);
-*/
-
-
 
 liberaVector(hst_suma);
 liberaVector(hst_velocidad);
 liberaVecinos(hst_vecinos);
-
-
-
-
-
-
-
-
-
 
 
 
