@@ -13,7 +13,7 @@
 #include "llenar_velocidad.h"
 #include "sumar_velocidad.h"
 #include "guardar_suma.h"
-#include "densidad_suma_doble_if.h"
+#include "densidad_suma_if_for.h"
 
 // MAIN: rutina principal ejecutada en el host
 int main(int argc, char** argv)
@@ -127,7 +127,7 @@ cudaEventRecord(start,0);
 
 //	sumarvelocidad<<<16,256>>>(&dev_velocidad, &dev_vecinos, &dev_suma, node);
 //	sumarvelocidad<<<64,256>>>(dev_velocidad, dev_vecinos, dev_suma, node);
-	densidad_suma_doble_if<<<64,256>>>(dev_velocidad,dev_suma,node); 
+	densidad_suma_if_for<<<64,256>>>(dev_velocidad,dev_suma,node); 
    if (cudaDeviceSynchronize() != cudaSuccess) {
        fprintf (stderr, "Cuda call failed\n");
    }

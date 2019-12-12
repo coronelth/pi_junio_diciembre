@@ -8,7 +8,7 @@
 
 //-------------Funcion sumar velocidad
 
-__global__ void densidad_suma_doble_if(float * pdist,float * psum, int node) {
+__global__ void densidad_suma_if_for(float * pdist,float * psum, int node) {
 
 int ndist=9;	//numero de funcion de distribucion
 int x = threadIdx.x + blockIdx.x * blockDim.x;
