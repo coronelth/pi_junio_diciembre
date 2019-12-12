@@ -6,34 +6,34 @@
 
 // Funciones de alocacion y liberacion de memoria
 
-double *allocaVector(double n) {
-	double *v = (double *) malloc(n * sizeof(double));
+float *allocaVector(float n) {
+	float *v = (float *) malloc(n * sizeof(float));
 	assert(v != NULL);
 	return v;
 }
 
-void liberaVector(double *vec) {
+void liberaVector(float *vec) {
 free(vec);
 return;
 }
 
 //matriz distribicion y matriz de suma
-void liberaMatriz(double** pmat, int node) {
+void liberaMatriz(float** pmat, int node) {
 	int i;
 	for( i=0; i<node; i++)
 		free(pmat[i]);
 		free(pmat);
 	return;
 	}
-double ** allocaMatriz(int node, int nveloc) {	
+float ** allocaMatriz(int node, int nveloc) {	
 	int i;
-	double **pmat;
-	pmat = (double **) malloc(node * sizeof(double*));
+	float **pmat;
+	pmat = (float **) malloc(node * sizeof(float*));
 	if( pmat == NULL )
 	return NULL; 
 
 	for( i=0; i<node; i++){
-		pmat[i]=(double *) malloc(nveloc * sizeof(double));
+		pmat[i]=(float *) malloc(nveloc * sizeof(float));
 			if( pmat[i] == NULL ){
 				liberaMatriz(pmat,i);
 	return NULL;
@@ -121,7 +121,7 @@ void llenarVecinos(int ** pmat, int row, int colum){
 
 // Llenar velocidad
 
-void llenarVelocidad(double ** pmat, int row, int colum){
+void llenarVelocidad(float ** pmat, int row, int colum){
 	FILE *fichero;
 	int node=row*colum;
 	int i,j;
@@ -170,7 +170,7 @@ void llenarVelocidad(double ** pmat, int row, int colum){
 	
 // Sumar velocidades
 
-void sumarVelocidad(double ** pdist,int ** pvec,double ** psum, int node){
+void sumarVelocidad(float ** pdist,int ** pvec,float ** psum, int node){
 	int i,j,k;	
 	int nvec=9;
 	int nvel=9;
@@ -182,6 +182,37 @@ void sumarVelocidad(double ** pdist,int ** pvec,double ** psum, int node){
 			psum[i][k]+=pdist[pvec[i][j]][k];			
 	}	
 }
+
+
+
+void guardar_suma(float **pmat,int node, int ndist ){
+
+// Guardar el archivo en un .txt
+//-----------------------------------------------
+int i;
+int j;
+
+FILE *f = fopen("suma_de_coliciones.txt", "w");
+if (f == NULL)
+{
+    printf("Error opening file!\n");
+    exit(1);
+}
+
+for(i=0;i<node;i++){
+	for(j=0;j<ndist;j++){
+		fprintf(f,"%f\t",pmat[i][j] );
+		}
+		
+	fprintf(f,"\n");
+	
+}
+
+fclose(f);
+
+	return ;
+}
+
 
 //*****************-----------------------------********************************--------------------*********************************
 
@@ -198,11 +229,11 @@ int main(void){
 	int nvec=9;
 	
 	clock_t t_ini, t_fin;
-	double secs;
+	float secs;
 
 // Alocacion de las matrices de mi problema	
-	double** matdist = allocaMatriz(node,nveloc);
-	double** matsum = allocaMatriz(node,nveloc);
+	float** matdist = allocaMatriz(node,nveloc);
+	float** matsum = allocaMatriz(node,nveloc);
 	int** matvec = allocaVecinos(node,nvec);
 
 //Inicializacion de los valores
@@ -217,9 +248,26 @@ int main(void){
 	t_fin = clock();
 	
 
- 	secs = (double)(t_fin - t_ini) / CLOCKS_PER_SEC;
-	printf("%.16g milisegundos\n", secs * 1000.0);   	
+ 	secs = (float)(t_fin - t_ini) / CLOCKS_PER_SEC;
+	printf("%.16g milisegundos\n", secs * 1000.0);   
 
+// guardamos la suma obtenida en un archivo txt
+
+
+int i,j;
+    printf( "Contenido de matsum:\n" );
+   for (i = 0; i < node; i++) {
+      for (j = 0; j < nveloc; j++)
+	 printf ("%f ", matsum[i][j]);
+      printf ("\n");
+   }
+printf ("\n\n\n");
+
+
+
+
+
+guardar_suma(matsum,node, nveloc);
 
 //Liberaci´on de memoria
 
