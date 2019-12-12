@@ -12,6 +12,7 @@
 #include "libera_vector.h"
 #include "llenar_velocidad.h"
 #include "sumar_velocidad.h"
+#include "guardar_suma.h"
 
 // MAIN: rutina principal ejecutada en el host
 int main(int argc, char** argv)
@@ -138,14 +139,11 @@ printf("> Tiempo de ejecucion: %f ms\n",elapsedTime);
 cudaEventDestroy(start);
 cudaEventDestroy(stop);
 
-
-
-
-
-
 // copia de datos
 cudaMemcpy(hst_velocidad, dev_velocidad, node*nvel*sizeof(float), cudaMemcpyDeviceToHost);
 // salida
+
+guardar_suma(hst_velocidad,node,nvel);
 
 
 cudaFree( dev_vecinos );

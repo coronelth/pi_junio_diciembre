@@ -1,7 +1,7 @@
 NVCC=nvcc
 
-hacer_pelota: hacer_pelota.o llenar_vecinos.o alloca_vecinos.o libera_vecinos.o libera_vector.o alloca_vector.o llenar_velocidad.o sumar_velocidad.o
-	$(NVCC) -o hacer_pelota hacer_pelota.o llenar_vecinos.o alloca_vecinos.o libera_vecinos.o libera_vector.o alloca_vector.o llenar_velocidad.o sumar_velocidad.o
+hacer_pelota: hacer_pelota.o llenar_vecinos.o alloca_vecinos.o libera_vecinos.o libera_vector.o alloca_vector.o llenar_velocidad.o sumar_velocidad.o guardar_suma.o
+	$(NVCC) -o hacer_pelota hacer_pelota.o llenar_vecinos.o alloca_vecinos.o libera_vecinos.o libera_vector.o alloca_vector.o llenar_velocidad.o sumar_velocidad.o guardar_suma.o
 
 hacer_pelota.o: hacer_pelota.cu
 	$(NVCC) -c hacer_pelota.cu
@@ -26,6 +26,9 @@ llenar_velocidad.o: llenar_velocidad.cu
 
 sumar_velocidad.o: sumar_velocidad.cu
 	$(NVCC) -c sumar_velocidad.cu
+
+guardar_suma.o: guardar_suma.cu
+	$(NVCC) -c guardar_suma.cu
 
 clean:
 	rm *.o

@@ -10,7 +10,6 @@
 
 __global__ void sumarvelocidad(float * pdist,int * pvec,float * psum, int node) {
 
-printf("Estoy en el kernel \n\n\n\n");
 int nvec=9;	//numero de vecinos
 int ndist=9;	//numero de funcion de distribucion
 int k=0;
@@ -27,7 +26,6 @@ if (x<node){ //para que se paralelice en cada nodo
 
 
 		}
-printf("Termine el kernel \n\n\n\n");
 }
 
 // nodo == x
