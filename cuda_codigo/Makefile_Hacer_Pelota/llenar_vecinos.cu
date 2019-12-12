@@ -37,7 +37,7 @@ void llenarVecinos(int * pmat, int row, int colum){
 
 //---------------------------------------------------- COMPROBACION DE QUE ESTA LEYENDO CORRECTAMENTE-----------------------------------
 
-/*   printf( "Contenido del fichero:\n" );
+/*   printf( "Contenido de :\n" );
    for (i = 0; i < node; i++) {
       for (j = 0; j < nvec; j++)
 	 printf ("%d ", pmat[i*nvec+j]);

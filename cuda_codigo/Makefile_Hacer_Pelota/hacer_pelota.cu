@@ -63,34 +63,63 @@ cudaMalloc( (void**)&dev_suma, node*nvel*sizeof(float));
 llenarVecinos(hst_vecinos, row, colum);
 llenarVelocidad(hst_velocidad, row, colum);
 
+
+
 // pasaje de los datos del hst al dev 
 
 cudaMemcpy(dev_vecinos,hst_vecinos,node*nvel*sizeof(int),cudaMemcpyHostToDevice);
 cudaMemcpy(dev_velocidad,hst_velocidad,node*nvel*sizeof(float),cudaMemcpyHostToDevice);
-
+cudaMemcpy(dev_suma,hst_suma,node*nvel*sizeof(float),cudaMemcpyHostToDevice);
 
 printf("Termine de pasar los datos al dev \n\n\n\n");
 
 
-/*
+
+// ------------------- ver que se este realizando bien el pasaje de los datos
+
+liberaVecinos(hst_vecinos);
+liberaVector(hst_suma);
+liberaVector(hst_velocidad);
+
+int*   hst_vecinos_p   = allocaVecinos(node,nvec);
+float* hst_velocidad_p = allocaVector(node,nvel);
+float* hst_suma_p      = allocaVector(node,nvel);
+
+cudaMemcpy(hst_vecinos_p, dev_vecinos, node*nvel*sizeof(int), cudaMemcpyDeviceToHost);
+cudaMemcpy(hst_velocidad_p, dev_velocidad, node*nvel*sizeof(int), cudaMemcpyDeviceToHost);
+cudaMemcpy(hst_suma_p, dev_suma, node*nvel*sizeof(int), cudaMemcpyDeviceToHost);
+
 // ver que es lo que tienen las matrices que se acaban de llenar en la alocacion
-int i=0;
+
 int j=0;
 for(i=0;i<node;i++){
 		for(j=0;j<nvec;j++){
-			printf("%d\t",&hst_vecinos[i][j]); 
+			printf("%d\t",hst_vecinos_p[i*nvel+j]); 
 		}
 		printf("\n");
 }
+printf("\n\n");
+
+
+for(i=0;i<node;i++){
+		for(j=0;j<nvec;j++){
+			printf("%f\t",hst_velocidad_p[i*nvel+j]); 
+		}
+		printf("\n");
+}
+printf("\n\n");
+
+for(i=0;i<node;i++){
+		for(j=0;j<nvec;j++){
+			printf("%f\t",hst_suma_p[i*nvel+j]); 
+		}
+		printf("\n");
+}
+printf("\n\n");
+
 
 
 printf("Que hay en el dev \n\n\n\n");
-
-*/
-
-
-
-
 
 
 
