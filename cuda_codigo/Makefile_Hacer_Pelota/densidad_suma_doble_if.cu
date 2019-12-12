@@ -16,10 +16,10 @@ int y = threadIdx.y + blockIdx.y * blockDim.y;
 int i;
 
 if (x<node){ //para que se paralelice en cada nodo
-	if (y<ndist){	//para que se paralelice en cada parte del vector de funcion de distribucion
-		psum[x]+=  pdist[(x*ndist+y)];} 
-			
-			
+	/*if (y<ndist){	//para que se paralelice en cada parte del vector de funcion de distribucion
+		psum[x]+=  pdist[(x*ndist+y)];} */
+		for(i=0;i<ndist;i++)	
+			psum[x]+=  pdist[(x*ndist+i)];
 		}
 }
 
