@@ -8,7 +8,7 @@
 
 //-------------Funcion sumar velocidad
 
-__global__ void sumarvelocidad(float * pdist,int ** pvec,float ** psum, int node) {
+__global__ void sumarvelocidad(float * pdist,int * pvec,float * psum, int node) {
 
 printf("Estoy en el kernel \n\n\n\n");
 int nvec=9;	//numero de vecinos
@@ -20,7 +20,8 @@ int y = threadIdx.y + blockIdx.y * blockDim.y;
 if (x<node){ //para que se paralelice en cada nodo
 	if (y<nvec){	//para que se paralelice en cada vecino
 		for(k=0;k<ndist;k++){	//para cada velocidad realizo la suma al no saber como paralelizar esta parte
-			psum[x][k]+=pdist[pvec[x][y]][k];				
+			psum[(x*ndist+k)]+=  pdist[((pvec[(x*nvec+y)])*ndist+k)];
+			//psum[0]+=  pdist[((pvec[0]))];				
 						}
 		}
 
@@ -29,3 +30,6 @@ if (x<node){ //para que se paralelice en cada nodo
 printf("Termine el kernel \n\n\n\n");
 }
 
+// nodo == x
+//vecino == y
+//velocidad == k

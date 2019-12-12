@@ -104,7 +104,7 @@ cudaEventRecord(start,0);
 	printf("Llamo al Kernel \n");
 
 //	sumarvelocidad<<<16,256>>>(&dev_velocidad, &dev_vecinos, &dev_suma, node);
-	sumarvelocidad<<<16,256>>>(&dev_velocidad, &dev_vecinos, &dev_suma, node);
+	sumarvelocidad<<<16,256>>>(dev_velocidad, dev_vecinos, dev_suma, node);
    if (cudaDeviceSynchronize() != cudaSuccess) {
        fprintf (stderr, "Cuda call failed\n");
    }
