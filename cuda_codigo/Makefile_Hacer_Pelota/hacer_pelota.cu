@@ -47,6 +47,10 @@ int*   hst_vecinos   = allocaVecinos(node,nvec);
 float* hst_velocidad = allocaVector(node,nvel);
 float* hst_suma      = allocaVector(node,nvel);
 
+// inicializar en cero el valor de la hst_suma
+int i;
+for(i=0;i<node;i++)
+	hst_suma[i*nvel+nvel] = 0;
 
 
 // reserva en el device

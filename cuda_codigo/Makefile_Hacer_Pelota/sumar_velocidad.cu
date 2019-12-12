@@ -20,7 +20,7 @@ if (x<node){ //para que se paralelice en cada nodo
 	if (y<nvec){	//para que se paralelice en cada vecino
 		for(k=0;k<ndist;k++){	//para cada velocidad realizo la suma al no saber como paralelizar esta parte
 			psum[(x*ndist+k)]+=  pdist[((pvec[(x*nvec+y)])*ndist+k)];
-			//psum[0]+=  pdist[((pvec[0]))];				
+				
 						}
 		}
 
