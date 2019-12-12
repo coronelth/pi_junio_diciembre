@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include "libera_matriz.h"
 
 float ** allocaMatriz(int node, int nveloc) {	
 	int i;
