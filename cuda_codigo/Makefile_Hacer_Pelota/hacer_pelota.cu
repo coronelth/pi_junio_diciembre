@@ -15,6 +15,7 @@
 #include "guardar_suma.h"
 #include "densidad_suma_if_for.h"
 #include "densidad_suma_doble_if.h"
+#include "llenar_suma.h"
 
 #include "generator_mat_vecinos.h"
 #include "generator_mat_dist.h"
@@ -24,8 +25,8 @@ int main(int argc, char** argv)
 {
 
 // declaracion
-int row   = 16;
-int colum = 16;
+int row   = 6;
+int colum = 6;
 int node  = row*colum;
 int nvec  = 9;
 int nvel  = 9;
@@ -57,10 +58,12 @@ cudaMalloc( (void**)&dev_suma, node*sizeof(float));
 llenarVecinos(hst_vecinos, row, colum);
 llenarVelocidad(hst_velocidad, row, colum);
 
+llenarSuma(hst_suma,node);
+/*
 for(i=0;i<node;i++){ // inicializar en cero el valor de la hst_suma
 	hst_suma[i] = 0;
 }
-
+*/
 
 // pasaje de los datos del hst al dev 
 
@@ -198,6 +201,7 @@ cudaEventDestroy(stop_p);
 // copia de datos
 cudaMemcpy(hst_suma, dev_suma, node*one*sizeof(float), cudaMemcpyDeviceToHost);
 // salida
+
 
 // ver si esta sumando bien
    printf( "Contenido de SUMA :\n" );

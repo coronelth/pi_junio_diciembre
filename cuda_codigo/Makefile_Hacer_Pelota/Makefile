@@ -1,7 +1,7 @@
 NVCC=nvcc
 
-hacer_pelota: hacer_pelota.o llenar_vecinos.o alloca_vecinos.o libera_vecinos.o libera_vector.o alloca_vector.o llenar_velocidad.o sumar_velocidad.o guardar_suma.o densidad_suma_if_for.o densidad_suma_doble_if.o generator_mat_dist.o generator_mat_vecinos.o
-	$(NVCC) -o hacer_pelota hacer_pelota.o llenar_vecinos.o alloca_vecinos.o libera_vecinos.o libera_vector.o alloca_vector.o llenar_velocidad.o sumar_velocidad.o guardar_suma.o densidad_suma_if_for.o densidad_suma_doble_if.o generator_mat_dist.o generator_mat_vecinos.o
+hacer_pelota: hacer_pelota.o llenar_vecinos.o alloca_vecinos.o libera_vecinos.o libera_vector.o alloca_vector.o llenar_velocidad.o sumar_velocidad.o guardar_suma.o densidad_suma_if_for.o densidad_suma_doble_if.o generator_mat_dist.o generator_mat_vecinos.o llenar_suma.o
+	$(NVCC) -o hacer_pelota hacer_pelota.o llenar_vecinos.o alloca_vecinos.o libera_vecinos.o libera_vector.o alloca_vector.o llenar_velocidad.o sumar_velocidad.o guardar_suma.o densidad_suma_if_for.o densidad_suma_doble_if.o generator_mat_dist.o generator_mat_vecinos.o llenar_suma.o
 
 hacer_pelota.o: hacer_pelota.cu
 	$(NVCC) -c hacer_pelota.cu
@@ -41,6 +41,9 @@ generator_mat_dist.o: generator_mat_dist.cu
 
 generator_mat_vecinos.o: generator_mat_vecinos.cu
 	$(NVCC) -c generator_mat_vecinos.cu
+
+llenar_suma.o: llenar_suma.cu
+	$(NVCC) -c llenar_suma.cu
 
 
 clean:
