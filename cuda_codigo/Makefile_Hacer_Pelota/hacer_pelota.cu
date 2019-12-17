@@ -25,14 +25,14 @@ int main(int argc, char** argv)
 {
 
 // declaracion
-int row   = 6;
-int colum = 6;
+int row   = 512;
+int colum = 512;
 int node  = row*colum;
 int nvec  = 9;
 int nvel  = 9;
 int one   = 1;
 int i;
-int num_prom = 1;
+int num_prom = 1000;
 
 int *dev_vecinos;
 float *dev_velocidad;
@@ -167,7 +167,7 @@ cudaEventDestroy(stop);
 // copia de datos
 cudaMemcpy(hst_suma, dev_suma, node*one*sizeof(float), cudaMemcpyDeviceToHost);
 // salida
-
+/*
 // ver si esta sumando bien
    printf( "Contenido de SUMA :\n" );
 
@@ -177,7 +177,8 @@ for(i=0;i<node;i++){
 		printf("\n");		
 		
 }
-printf("\n\n");
+printf("\n\n");*/
+
 //----------------------------------------------------------Realizo lo mismo para el otro kernel propuesto-----------------------------------------------------------------------
 
 // declaracion de eventos
@@ -230,14 +231,14 @@ cudaMemcpy(hst_suma, dev_suma, node*one*sizeof(float), cudaMemcpyDeviceToHost);
 // ver si esta sumando bien
    printf( "Contenido de SUMA :\n" );
 
-
+/*
 for(i=0;i<node;i++){
 		printf("%f\t",hst_suma[i]); 
 		printf("\n");		
 		
 }
 printf("\n\n");
-
+*/
 
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
