@@ -16,6 +16,9 @@
 #include "densidad_suma_if_for.h"
 #include "densidad_suma_doble_if.h"
 
+#include "generator_mat_vecinos.h"
+#include "generator_mat_dist.h"
+
 // MAIN: rutina principal ejecutada en el host
 int main(int argc, char** argv)
 {
@@ -32,6 +35,11 @@ int i;
 int *dev_vecinos;
 float *dev_velocidad;
 float *dev_suma;
+
+// Generacion de la matriz de vecinos y pdist
+
+generator_matriz_dist (row, colum);
+generator_matriz_vecinos (row, colum);
 
 // reserva en el host
 

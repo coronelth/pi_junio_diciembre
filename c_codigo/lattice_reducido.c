@@ -53,12 +53,17 @@ int main(void){
 //Suma de los valores de la velocidad
 // Tomas de tiempo
 
+
+
+
+
 	t_ini = clock();
 	sumarVelocidad(matdist,matvec,matsum,node);
 	t_fin = clock();
-	
+
 
  	secs = (float)(t_fin - t_ini) / CLOCKS_PER_SEC;
+
 	printf ("\n\n\n");
 	printf("%.16g milisegundos\n", secs * 1000.0);   
 	printf ("\n\n\n");
