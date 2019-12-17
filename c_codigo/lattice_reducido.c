@@ -27,14 +27,14 @@
 int main(void){
 	
 // Definicion de las dimensiones de mi problema
-	int row=6;
-	int colum=6;
+	int row=512;
+	int colum=512;
 	int node= row*colum;
 	int nveloc=9;
 	int nvec=9;
 	int one=1;
 	int i;
-	int num_prom = 1000000 ;	
+	int num_prom = 1000 ;	
 
 	clock_t t_ini, t_fin;
 	float secs;
@@ -77,14 +77,14 @@ for(i=0;i<num_prom;i++){
 // guardamos la suma obtenida en un archivo txt
 
 
-
+/*
     printf( "Contenido de matsum:\n" );
    for (i = 0; i < node; i++) {
       	 printf ("%f ", matsum[i][0]);
       printf ("\n");
    }
 printf ("\n\n\n");
-
+*/
 
 guardar_suma(matsum,node, one);
 
