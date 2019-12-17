@@ -1,7 +1,7 @@
 GCC=gcc
 
-lattice_reducido: lattice_reducido.o alloca_vector.o alloca_vecinos.o alloca_matriz.o libera_vector.o libera_matriz.o libera_vecinos.o llenar_vecinos.o llenar_velocidad.o sumar_velocidad.o guardar_suma.o generator_mat_dist.o generator_mat_vecinos.o
-	$(GCC) -o lattice_reducido lattice_reducido.o alloca_vector.o alloca_vecinos.o alloca_matriz.o libera_vector.o libera_matriz.o libera_vecinos.o llenar_vecinos.o llenar_velocidad.o sumar_velocidad.o guardar_suma.o generator_mat_dist.o generator_mat_vecinos.o
+lattice_reducido: lattice_reducido.o alloca_vector.o alloca_vecinos.o alloca_matriz.o libera_vector.o libera_matriz.o libera_vecinos.o llenar_vecinos.o llenar_velocidad.o llenar_suma.o sumar_velocidad.o guardar_suma.o generator_mat_dist.o generator_mat_vecinos.o
+	$(GCC) -o lattice_reducido lattice_reducido.o alloca_vector.o alloca_vecinos.o alloca_matriz.o libera_vector.o libera_matriz.o libera_vecinos.o llenar_vecinos.o llenar_velocidad.o llenar_suma.o sumar_velocidad.o guardar_suma.o generator_mat_dist.o generator_mat_vecinos.o
 
 lattice_reducido.o: lattice_reducido.c
 	$(GCC) -c lattice_reducido.c
@@ -35,6 +35,9 @@ llenar_vecinos.o: llenar_vecinos.c
 
 llenar_velocidad.o: llenar_velocidad.c
 	$(GCC) -c llenar_velocidad.c
+
+llenar_suma.o: llenar_suma.c
+	$(GCC) -c llenar_suma.c
 
 sumar_velocidad.o: sumar_velocidad.c
 	$(GCC) -c sumar_velocidad.c
