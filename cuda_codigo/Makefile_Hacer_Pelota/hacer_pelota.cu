@@ -24,8 +24,8 @@ int main(int argc, char** argv)
 {
 
 // declaracion
-int row   = 6;
-int colum = 6;
+int row   = 16;
+int colum = 16;
 int node  = row*colum;
 int nvec  = 9;
 int nvel  = 9;
