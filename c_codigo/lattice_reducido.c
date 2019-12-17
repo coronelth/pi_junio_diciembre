@@ -17,13 +17,16 @@
 #include "sumar_velocidad.h"
 #include "guardar_suma.h"
 
+#include "generator_mat_vecinos.h"
+#include "generator_mat_dist.h"
+
 //*****************-----------------------------********************************
 
 int main(void){
 	
 // Definicion de las dimensiones de mi problema
-	int row=6;
-	int colum=6;
+	int row=10;
+	int colum=10;
 	int node= row*colum;
 	int nveloc=9;
 	int nvec=9;
@@ -36,6 +39,12 @@ int main(void){
 	float** matdist = allocaMatriz(node,nveloc);
 	float** matsum = allocaMatriz(node,one);
 	int** matvec = allocaVecinos(node,nvec);
+
+// Generacion de la matriz de vecinos y pdist
+
+	generator_matriz_dist (row, colum);
+	generator_matriz_vecinos (row, colum);
+
 
 //Inicializacion de los valores
 	llenarVelocidad(matdist,row,colum);
