@@ -32,6 +32,7 @@ int nvec  = 9;
 int nvel  = 9;
 int one   = 1;
 int i;
+int num_prom = 1;
 
 int *dev_vecinos;
 float *dev_velocidad;
@@ -57,8 +58,8 @@ cudaMalloc( (void**)&dev_suma, node*sizeof(float));
 // inicializacion de datos
 llenarVecinos(hst_vecinos, row, colum);
 llenarVelocidad(hst_velocidad, row, colum);
-
 llenarSuma(hst_suma,node);
+
 /*
 for(i=0;i<node;i++){ // inicializar en cero el valor de la hst_suma
 	hst_suma[i] = 0;
@@ -119,9 +120,18 @@ printf("\n\n");
 // declaracion de eventos
 cudaEvent_t start;
 cudaEvent_t stop;
+float elapsedTime;
+float time_prom = 0.0;
 // creacion de eventos
 cudaEventCreate(&start);
 cudaEventCreate(&stop);
+
+
+for(i=0;i<num_prom;i++){
+
+llenarSuma(hst_suma,node);
+
+
 // marca de inicio
 cudaEventRecord(start,0);
 // codigo a temporizar en el device
@@ -133,7 +143,8 @@ cudaEventRecord(start,0);
        fprintf (stderr, "Cuda call failed\n");
    }
 
-// aqui va el kernel que realiza la suma que es lo que se quiere medir
+
+
 // -----------------------------------------------
 
 // marca de final
@@ -141,10 +152,14 @@ cudaEventRecord(stop,0);
 // sincronizacion GPU-CPU
 cudaEventSynchronize(stop);
 // calculo del tiempo en milisegundos
-float elapsedTime;
+
 cudaEventElapsedTime(&elapsedTime,start,stop);
+time_prom += elapsedTime;
+}
+
+time_prom = time_prom /num_prom;
 // impresion de resultados
-printf("> Tiempo de ejecucion: %f ms\n",elapsedTime);
+printf("> Tiempo de ejecucion: %f ms\n",time_prom);
 // liberacion de recursos
 cudaEventDestroy(start);
 cudaEventDestroy(stop);
@@ -168,9 +183,15 @@ printf("\n\n");
 // declaracion de eventos
 cudaEvent_t start_p;
 cudaEvent_t stop_p;
+float elapsedTime_p;
+float time_prom_p = 0.0;
 // creacion de eventos
 cudaEventCreate(&start_p);
 cudaEventCreate(&stop_p);
+
+for(i=0;i<num_prom;i++){
+
+llenarSuma(hst_suma,node);
 // marca de inicio
 cudaEventRecord(start_p,0);
 // codigo a temporizar en el device
@@ -190,10 +211,13 @@ cudaEventRecord(stop_p,0);
 // sincronizacion GPU-CPU
 cudaEventSynchronize(stop_p);
 // calculo del tiempo en milisegundos
-float elapsedTime_p;
 cudaEventElapsedTime(&elapsedTime_p,start_p,stop_p);
+time_prom_p += elapsedTime_p;
+}
+
+time_prom_p = time_prom_p /num_prom;
 // impresion de resultados
-printf("> Tiempo de ejecucion: %f ms\n",elapsedTime_p);
+printf("> Tiempo de ejecucion: %f ms\n",time_prom_p);
 // liberacion de recursos
 cudaEventDestroy(start_p);
 cudaEventDestroy(stop_p);
